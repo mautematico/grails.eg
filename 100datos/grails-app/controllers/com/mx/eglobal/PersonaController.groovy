@@ -17,6 +17,14 @@ class PersonaController {
         params.max = Math.min(max ?: 10, 100)
         respond Persona.list(params), model:[personaInstanceCount: Persona.count()]
     }
+    def buscarPersonas(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        
+        def lista = Persona.list(params)
+        def lista_json = (lista as JSON).toString()
+
+        [personas_JSON:lista_json, personaInstanceCount: Persona.count()]
+    }
     def personasJSON(){
         def personas = Persona.getAll();
         render personas as JSON;
