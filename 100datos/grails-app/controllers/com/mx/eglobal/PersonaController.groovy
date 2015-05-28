@@ -18,18 +18,12 @@ class PersonaController {
         respond Persona.list(params), model:[personaInstanceCount: Persona.count()]
     }
     def personasJSON(){
-
         def personas = Persona.getAll();
-        def data = (personas as JSON).toString()
-
-               [data: data]
-
+        render personas as JSON;
     }
-    def histogramaEdades(){
-        
+    def histogramaEdades(){        
         personasJSON();
     }
-
 
     def show(Persona personaInstance) {
         respond personaInstance
