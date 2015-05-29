@@ -18,12 +18,22 @@ class PersonaController {
         respond Persona.list(params), model:[personaInstanceCount: Persona.count()]
     }
     def buscarPersonas(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 100, 100)
         
-        def lista = Persona.list(params)
+        def lista = Persona.createCriteria().list (params) {
+               if ( params.nombre ) {
+                   ilike("nombre", "%${params.nombre}%")
+               }
+               if ( params.edad ) {
+                     between("edad", Integer.parseInt(params.edad), Integer.parseInt(params.edad))
+               }
+               if ( params.iban ) {
+                   ilike("iban", "%${params.iban}%")
+               }
+            }
+        
         def lista_json = (lista as JSON).toString()
-
-        [personas_JSON:lista_json, personaInstanceCount: Persona.count()]
+        [personas_JSON:lista_json, personaInstanceCount: lista.totalCount, params: params]
     }
     def personasJSON(){
         def personas = Persona.getAll();
