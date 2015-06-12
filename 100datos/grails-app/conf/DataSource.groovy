@@ -14,7 +14,6 @@ hibernate {
     singleSession = true // configure OSIV singleSession mode
     flush.mode = 'manual' // OSIV session flush mode outside of transactional context
 }
-
 // environment specific settings
 environments {
     development {
