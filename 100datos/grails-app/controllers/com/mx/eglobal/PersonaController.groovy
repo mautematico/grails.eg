@@ -1,7 +1,5 @@
 package com.mx.eglobal
 
-
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -13,7 +11,7 @@ class PersonaController {
     // Export service provided by Export plugin 
     def exportService
     def grailsApplication  //inject GrailsApplication
-    
+
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
