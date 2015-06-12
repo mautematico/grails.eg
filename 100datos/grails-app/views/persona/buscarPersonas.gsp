@@ -8,12 +8,15 @@
     <asset:javascript src="application.js"/>            
     <asset:javascript src="grails-angularjs.js"/>
     <asset:stylesheet src="grails-angularjs.css"/>
+    <r:require module="export"/>
+
 </head>
 <body ng-app="">
  
     <!-- Modal -->
     <div class="modal fade" id="primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
+
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -118,6 +121,9 @@
     </div>
 </div>
 <table class="table" data-toggle="table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-toolbar="#toolbar">
+
+<export:formats formats="['csv', 'excel', 'pdf', 'rtf', 'xml']" />
+
     <thead>
         <tr>
           <g:sortableColumn data-field="nombre" property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />
@@ -141,5 +147,6 @@
                     params="${params}"
         />
       </ul>
+      
 </body>
 </html>

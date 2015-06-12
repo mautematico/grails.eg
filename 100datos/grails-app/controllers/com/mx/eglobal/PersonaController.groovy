@@ -10,11 +10,19 @@ import org.codehaus.groovy.grails.web.json.*
 
 @Transactional(readOnly = true)
 class PersonaController {
+    // Export service provided by Export plugin 
+    def exportService
+    def grailsApplication  //inject GrailsApplication
+    
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        respond Persona.list(params), model:[personaInstanceCount: Persona.count()]
+
+
+
         respond Persona.list(params), model:[personaInstanceCount: Persona.count()]
     }
     def buscarPersonas(Integer max) {
@@ -32,6 +40,28 @@ class PersonaController {
                }
             }
         
+             println params;
+
+        if(params?.extension){
+            response.contentType = grailsApplication.config.grails.mime.types[params.extension]
+            response.setHeader("Content-disposition", "attachment; filename=personas.${params.extension}")
+
+
+            List fields = ["nombre", "edad"]
+            Map labels = ["nombre": "Nombre", "edad": "Edad"]
+                        // Formatter closure
+            def upperCase = { domain, value ->
+                return value.toUpperCase()
+            }
+
+            Map formatters = [nombre: upperCase]        
+            Map parameters = [edad: "Edades", "column.widths": [0.2, 0.3, 0.5]]
+           // Map formatters = [iban: upperCase]  
+
+            exportService.export(params.extension, response.outputStream, Persona.list(params), fields, labels, formatters, parameters)
+        }
+
+
         def lista_json = (lista as JSON).toString()
         [personas_JSON:lista_json, personaInstanceCount: lista.totalCount, params: params]
     }
